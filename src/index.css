@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    @apply bg-primary-cream text-gray-800 font-inter;
+  }
+  
+  h1, h2, h3 {
+    @apply font-playfair;
+  }
+}
+
+@layer components {
+  .blob {
+    background: linear-gradient(135deg, #FFF8E1 0%, #D84315 50%, #4E342E 100%);
+    border-radius: 50% 20% 60% 30% / 40% 50% 20% 60%;
+    filter: blur(40px);
+  }
+}
+
