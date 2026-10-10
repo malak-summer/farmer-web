@@ -1,0 +1,70 @@
+.site-header { position: sticky; top: 0; z-index: 50; background: #031e13f5; color: #f9fcf3; backdrop-filter: blur(12px); }
+.navigation { min-height: 96px; display: flex; align-items: center; justify-content: space-between; gap: 28px; }
+.brand { display: inline-flex; align-items: center; gap: 12px; font-size: 1.12rem; font-weight: 600; line-height: 1.3; overflow-wrap: anywhere; }
+.brand-mark { display: grid; place-items: center; width: 37px; height: 40px; flex-shrink: 0; color: #b5e746; border: 1px solid #426b31; border-radius: 12px; font: 30px Georgia, serif; }
+.desktop-links { display: flex; align-items: center; gap: 38px; list-style: none; margin: 0; padding: 0; font-size: .82rem; }
+.desktop-links a:not(.button) { display: block; padding-block: 16px; }
+.desktop-links a:not(.button):hover { color: #b5e746; }
+.menu-toggle { display: none; }
+.hero-band { background: #031e13; color: #fff; padding-bottom: 30px; }
+.hero { display: grid; grid-template-columns: 1fr 1fr; gap: 0 35px; padding-top: 16px; }
+.hero-copy { align-self: center; padding-block: 36px; }
+.hero .eyebrow { display: flex; align-items: center; gap: 10px; color: #c2d7a6; margin-bottom: 24px; }
+.little-leaf { display: inline-block; width: 18px; height: 25px; border-radius: 90% 0 90% 0; background: #b5e746; transform: rotate(18deg); flex-shrink: 0; }
+.hero-description { max-width: 380px; margin-top: 26px; color: #bdcfc0; font-size: .95rem; line-height: 1.85; }
+.hero-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 32px; }
+.hero-art { align-self: center; position: relative; min-width: 0; }
+.botanical-art { display: block; width: 100%; height: auto; }
+.section-heading { display: flex; align-items: center; justify-content: space-between; gap: 30px; margin-bottom: 28px; }
+.section-heading > p { max-width: 290px; font-size: .9rem; line-height: 1.8; color: #586652; }
+.topic-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+.topic-card { padding: 20px; background: #fff; border: 1px solid #e5eadf; border-radius: 15px; box-shadow: 0 5px 18px #06241604; transition: border-color .2s, background .2s; }
+.topic-card:hover { border-color: #82a940; background: #fbfff4; }
+.topic-illustration { height: 110px; display: grid; place-items: center; background: radial-gradient(ellipse, #e5f4c5, #f7faef 65%); border-radius: 10px; margin-bottom: 20px; }
+.topic-illustration svg { width: 54px; height: 54px; color: #497720; }
+.topic-card h3 { display: flex; justify-content: space-between; gap: 10px; font-size: 1rem; }
+.topic-card h3 span { color: #47741b; }
+.topic-card p { margin-top: 10px; color: #586652; font-size: .78rem; line-height: 1.8; }
+.lead { font-size: .95rem; line-height: 1.85; color: #d0ddcc; }
+.products-section { background: #f6f7f3; }
+.availability-panel { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 28px; background: #fff; border: 1px solid #e0e7d7; border-radius: 16px; padding: 36px; }
+.availability-panel h3 { font-size: 1.4rem; }
+.availability-panel p:not(.eyebrow) { color: #586652; max-width: 490px; line-height: 1.8; font-size: .85rem; margin-top: 12px; }
+.availability-symbol { display: grid; place-items: center; width: 88px; height: 100px; background: #f1f8e3; border-radius: 18px; }
+.availability-symbol .little-leaf { width: 32px; height: 48px; background: #719f32; }
+.product-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+.product-card { display: flex; flex-direction: column; align-items: start; padding: 28px; background: #fff; border: 1px solid #e0e7d7; border-radius: 16px; }
+.product-card p { line-height: 1.8; color: #586652; font-size: .9rem; margin-block: 16px 24px; }
+.product-card .text-link { margin-top: auto; }
+.social-section { padding-bottom: 60px; }
+.social-links { display: flex; flex-wrap: wrap; gap: 24px; margin-top: 24px; }
+.contact-section { padding-block: 64px; background: #eaf0e1; border-top: 1px solid #dce5d3; }
+.contact-layout { display: grid; grid-template-columns: .85fr 1.15fr; gap: 80px; align-items: start; }
+.contact-copy { padding-top: 12px; min-width: 0; }
+.contact-copy h2 { margin-bottom: 26px; }
+.contact-intro { color: #586652; line-height: 1.85; max-width: 360px; font-size: .95rem; }
+.contact-intro p + p { margin-top: 18px; }
+.contact-card { background: #fff; border: 1px solid #dce5d3; padding: 32px; border-radius: 18px; }
+.contact-form { display: grid; gap: 22px; }
+.form-heading { font-size: 1.4rem; }
+.form-note { font-size: .78rem; color: #586652; line-height: 1.8; }
+.form-unavailable { padding: 14px 16px; background: #f5eedb; border-left: 3px solid #a38243; border-radius: 4px; font-size: .82rem; line-height: 1.7; color: #65522e; }
+.contact-form label { display: block; font-size: .8rem; font-weight: 600; margin-bottom: 9px; }
+.contact-form input, .contact-form textarea { width: 100%; min-width: 0; background: #fcfdf9; border: 1px solid #a7b19b; border-radius: 8px; padding: 13px 14px; font-size: 1rem; color: #13291b; }
+.contact-form textarea { resize: vertical; min-height: 140px; }
+.contact-form input::placeholder, .contact-form textarea::placeholder { color: #697260; }
+.contact-form input:focus-visible, .contact-form textarea:focus-visible { outline-color: #567044; outline-offset: 2px; }
+.contact-status { font-size: .87rem; line-height: 1.75; }
+.contact-status:empty { display: none; }
+.contact-submit { width: 100%; }
+.contact-submit:disabled { cursor: not-allowed; background: #dce1d4; border-color: #c8d0bf; color: #53604a; }
+.site-footer { background: #031e13; color: #f5f9ee; padding-top: 56px; }
+.site-footer p { color: #b4c8b9; font-size: .84rem; margin-top: 20px; line-height: 1.8; }
+.footer-main { display: flex; justify-content: space-between; gap: 40px; padding-bottom: 48px; }
+.footer-main nav { display: flex; align-items: start; flex-wrap: wrap; gap: 30px; font-size: .82rem; }
+.footer-main nav a { padding-block: 12px; }
+.site-footer a:hover { color: #b5e746; }
+.footer-bottom { display: flex; justify-content: space-between; gap: 20px; border-top: 1px solid #274531; padding-block: 24px; color: #b4c8b9; font-size: .72rem; }
+.footer-bottom a { display: inline-flex; align-items: center; min-height: 44px; gap: 24px; }
+.skip-link { position: fixed; top: -100px; left: 1rem; z-index: 100; padding: 1rem; background: #b5e746; color: #13291b; }
+.skip-link:focus { top: 1rem; }

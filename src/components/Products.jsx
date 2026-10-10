@@ -1,74 +1,18 @@
-import { motion } from 'framer-motion'
+import { useState } from 'react'
 import ProductCard from './ProductCard'
-
-const products = [
-  {
-    name: 'Organic Tomatoes',
-    description: 'Sun-ripened tomatoes bursting with flavor. Perfect for salads, sauces, and fresh eating.',
-    image: '/images/tomatoes.jpg'
-  },
-  {
-    name: 'Fresh Strawberries',
-    description: 'Sweet, juicy strawberries picked at peak ripeness. Nature\'s candy from our fields.',
-    image: '/images/strawberries.jpg'
-  },
-  {
-    name: 'Heirloom Carrots',
-    description: 'Colorful heirloom carrots with incredible sweetness and crunch. Straight from the earth.',
-    image: '/images/carrots.jpg'
-  },
-  {
-    name: 'Golden Apples',
-    description: 'Crisp, golden apples with perfect balance of sweet and tart. Farm-fresh daily.',
-    image: '/images/apples.jpg'
-  },
-  {
-    name: 'Baby Spinach',
-    description: 'Tender baby spinach leaves, nutrient-packed and ready for your favorite recipes.',
-    image: '/images/spinach.jpg'
-  },
-  {
-    name: 'Fresh Basil',
-    description: 'Aromatic fresh basil with intense flavor. Perfect for pesto, pizza, and Mediterranean dishes.',
-    image: '/images/basil.jpg'
-  }
-]
-
-const Products = () => {
-  return (
-    <section id="products" className="py-32 bg-gradient-to-b from-cream to-white/50">
-      <div className="container mx-auto px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-24"
-        >
-          <h2 className="text-4xl lg:text-6xl font-playfair font-bold bg-gradient-to-r from-primary-brown via-primary-terracotta to-primary-olive bg-clip-text text-transparent mb-6">
-            Our Harvest
-          </h2>
-          <p className="text-xl lg:text-2xl text-gray-600 max-w-3xl mx-auto font-light">
-            A selection of our finest organic produce, picked at perfection from our family farm.
-          </p>
-        </motion.div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
-          {products.map((product, index) => (
-            <motion.div
-              key={product.name}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              viewport={{ once: true }}
-            >
-              <ProductCard {...product} />
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </section>
-  )
+import { farmContent, getProduceItems } from '../content/farm'
+const Products = ({ filterable = false }) => {
+  const items = getProduceItems()
+  const enquiryGuide = !farmContent.products.length
+  const categories = [...new Set(items.map(product => product.category).filter(Boolean))]
+  const requested = typeof window === 'undefined' ? '' : new globalThis.URLSearchParams(window.location.search).get('category')
+  const [category, setCategory] = useState(categories.includes(requested) ? requested : '')
+  const [query, setQuery] = useState('')
+  const products = items.filter(product => !filterable || ((!category || product.category === category) && [product.name, product.description, product.category].join(' ').toLowerCase().includes(query.trim().toLowerCase())))
+  return <section id="products" className="products-section section-space"><div className="section-shell"><div className="section-heading"><div><p className="eyebrow">Fresh Farm / Produce</p><h2>{enquiryGuide ? 'Find the right produce question' : 'Explore our produce'}</h2></div><a className="text-link" href="/contact.html">Ask about availability <span aria-hidden="true">→</span></a></div>
+    <p className="catalogue-note">{enquiryGuide ? 'Use these photo-based examples to shape your enquiry. They are a produce guide, not a live stock list or confirmation that Fresh Farm grows or sells each item. ' : ''}Availability may vary by season. Contact Fresh Farm for current availability.</p>
+    {filterable && categories.length > 0 && <div className="catalogue-filter"><div className="catalogue-field"><label htmlFor="produce-search">Search produce</label><input id="produce-search" type="search" value={query} onChange={event => setQuery(event.target.value)} placeholder="Try apples or herbs" /></div><div className="catalogue-field"><label htmlFor="product-category">Produce category</label><select id="product-category" value={category} onChange={event => setCategory(event.target.value)}><option value="">All categories</option>{categories.map(name => <option key={name}>{name}</option>)}</select></div><p role="status" aria-live="polite">{products.length} {enquiryGuide ? (products.length === 1 ? 'enquiry topic' : 'enquiry topics') : (products.length === 1 ? 'product' : 'products')}</p></div>}
+    {products.length === 0 && <div className="catalogue-empty"><h3>No matching produce</h3><p>Try a broader search or choose another category.</p><button type="button" className="button" onClick={() => { setQuery(''); setCategory('') }}>Clear filters</button></div>}<div className="product-grid">{products.map(product => <ProductCard key={product.name} {...product} enquiryGuide={enquiryGuide} />)}</div>
+  </div></section>
 }
-
 export default Products
-

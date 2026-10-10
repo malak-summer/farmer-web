@@ -1,0 +1,4 @@
+import PageHeader from '../components/PageHeader'
+import Products from '../components/Products'
+const ShopPage = () => <><PageHeader title="Produce & availability" eyebrow="Fresh Farm / Shop" description="Explore vegetables, fruits and herbs, then tell us what you are looking for. Online ordering is not currently available." /><Products filterable /><aside className="section-shell ordering-note"><h2>Make your enquiry useful</h2><p>Include the produce name, preferred variety, quantity and date you have in mind. Tell us whether it is for home cooking or a business requirement, and mention any flexibility on timing or alternatives.</p><p>An enquiry does not place an order, reserve stock or confirm collection or delivery. Agree the available item and any arrangements directly before making plans.</p><a className="text-link" href="/contact.html">Send your produce enquiry <span aria-hidden="true">→</span></a></aside></>
+export default ShopPage

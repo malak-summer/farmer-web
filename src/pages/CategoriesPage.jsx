@@ -1,0 +1,4 @@
+import PageHeader from '../components/PageHeader'
+import Categories from '../components/Categories'
+const CategoriesPage = () => <><PageHeader title="Produce categories" eyebrow="Find what matters to your meal" description="Start with vegetables, fruits or herbs. Each category opens the relevant produce enquiry topics in the shop." /><Categories /><aside className="section-shell category-guide"><h2>Let the season shape your question</h2><p>Availability can change, so a flexible enquiry is often the most useful. Tell us the dish or purpose you have in mind as well as the item you prefer. For a specific variety or quantity, ask before committing to a plan.</p><a href="/contact.html" className="text-link">Ask a seasonal availability question <span aria-hidden="true">→</span></a></aside></>
+export default CategoriesPage

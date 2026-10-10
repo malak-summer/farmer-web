@@ -1,129 +1,147 @@
 import { motion } from 'framer-motion'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
+import SecurityCheck from './SecurityCheck'
+import { requestContact } from '../services/contact'
 
-const Contact = () => {
+const Contact = ({ siteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY || '' }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    message: ''
+    message: '',
+    website: ''
   })
 
-  const handleSubmit = (e) => {
+  const [status, setStatus] = useState('')
+
+  const [busy, setBusy] = useState(false)
+  const sending = useRef(false)
+  const [token, setToken] = useState('')
+  const [receipt, setReceipt] = useState('')
+  const [resetKey, setResetKey] = useState(0)
+
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    // Simulate form submission
-    alert('Thank you for your message! We\'ll get back to you soon. 🌱')
-    setFormData({ name: '', email: '', message: '' })
+    if (sending.current) return
+    if (!receipt && (!formData.name.trim() || !formData.message.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email))) {
+      setStatus('Please enter your name, a valid email address, and a message using more than spaces.')
+      return
+    }
+    if (!receipt && (!siteKey || !token)) {
+      setStatus(siteKey ? 'Please complete the security check.' : 'Online contact is temporarily unavailable. Your input has been kept.')
+      return
+    }
+    sending.current = true
+    setBusy(true)
+    setStatus(receipt ? 'Checking delivery status...' : 'Submitting your message...')
+    try {
+      const result = await requestContact(receipt ? { receipt } : { ...formData, token })
+      if (result.status === 'delivered' && receipt) {
+        setStatus("Your message was delivered to the farm's mail server. Thank you for getting in touch.")
+      } else if (result.status === 'failed') {
+        setStatus('Delivery failed. Your input is preserved. Please contact the farm by another confirmed channel.')
+      } else if (result.status === 'pending' && (receipt || result.receipt)) {
+        if (result.receipt) setReceipt(result.receipt)
+        setStatus('Your message has been accepted for delivery, but delivery is not confirmed yet. Use Check delivery status in a moment. Your input is kept below.')
+      } else throw new Error('The service returned an unexpected result. Delivery is not confirmed.')
+    } catch (error) {
+      setStatus(error.name === 'TimeoutError' || error.name === 'TypeError' ? 'The connection failed or timed out. Delivery is not confirmed. Your input has been kept; please try again later.' : error.message)
+    } finally {
+      if (!receipt) { setToken(''); setResetKey(value => value + 1) }
+      setBusy(false)
+      sending.current = false
+    }
+  }
+
+  const updateField = (name, value) => {
+    setStatus('')
+    setReceipt('')
+    setFormData(current => ({ ...current, [name]: value }))
   }
 
   return (
-    <section id="contact" className="py-32 bg-gradient-to-b from-cream/90 to-white relative">
-      <div className="container mx-auto px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
-          
+    <section id="contact" className="contact-section">
+      <div className="section-shell">
+        <div className="contact-layout">
+
           {/* Contact Info */}
           <motion.div
-            initial={{ opacity: 0, x: -50 }}
+            initial={false}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            className="lg:col-span-1"
+            className="contact-copy"
           >
-            <h2 className="text-4xl lg:text-6xl font-playfair font-bold bg-gradient-to-r from-primary-brown to-primary-terracotta bg-clip-text text-transparent mb-12 leading-tight">
-              Get In Touch
+            <p className="eyebrow">Get in touch</p><h2>
+              Send your enquiry
             </h2>
-            
-            <div className="space-y-8 mb-12">
-              <div className="flex items-start space-x-4 p-6 bg-white/70 backdrop-blur rounded-2xl shadow-soft hover:shadow-hover transition-all duration-300">
-                <div className="w-12 h-12 bg-gradient-to-br from-primary-olive to-primary-terracotta rounded-xl flex items-center justify-center text-2xl font-bold text-white flex-shrink-0 mt-1">
-                  📍
-                </div>
-                <div>
-                  <h4 className="font-semibold text-xl text-primary-brown mb-1">Visit Us</h4>
-                  <p className="text-gray-600">Sunny Valley Farm<br/>Green Hills, CA 90210</p>
-                </div>
-              </div>
 
-              <div className="flex items-start space-x-4 p-6 bg-white/70 backdrop-blur rounded-2xl shadow-soft hover:shadow-hover transition-all duration-300">
-                <div className="w-12 h-12 bg-gradient-to-br from-primary-terracotta to-primary-brown rounded-xl flex items-center justify-center text-2xl font-bold text-white flex-shrink-0 mt-1">
-                  📞
-                </div>
-                <div>
-                  <h4 className="font-semibold text-xl text-primary-brown mb-1">Call Us</h4>
-                  <p className="text-gray-600">
-                    <a href="tel:+1234567890" className="hover:text-primary-terracotta transition-colors">+1 (234) 567-890</a>
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start space-x-4 p-6 bg-white/70 backdrop-blur rounded-2xl shadow-soft hover:shadow-hover transition-all duration-300">
-                <div className="w-12 h-12 bg-gradient-to-br from-primary-brown to-primary-olive rounded-xl flex items-center justify-center text-3xl font-bold text-white flex-shrink-0 mt-1">
-                  ✉️
-                </div>
-                <div>
-                  <h4 className="font-semibold text-xl text-primary-brown mb-1">Email</h4>
-                  <p className="text-gray-600">
-                    <a href="mailto:hello@freshfarm.com" className="hover:text-primary-terracotta transition-colors">
-                      hello@freshfarm.com
-                    </a>
-                  </p>
-                </div>
-              </div>
+            <div className="contact-intro">
+              <p>For produce enquiries, include the item or variety, approximate quantity and preferred timing. If you can consider alternatives, let us know.</p>
+              <p>For business enquiries, include your organisation and the purpose of your request. This form starts a discussion; it does not confirm an order or a service. Use an email address where you can receive a reply.</p>
             </div>
           </motion.div>
 
           {/* Contact Form */}
           <motion.div
-            initial={{ opacity: 0, x: 50 }}
+            initial={false}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            className="lg:col-span-1"
+            className="contact-copy"
           >
-            <div className="bg-white/70 backdrop-blur-lg rounded-3xl p-10 lg:p-12 shadow-2xl border border-white/40 hover:shadow-hover transition-all duration-500">
-              <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="contact-card">
+              <form onSubmit={handleSubmit} aria-describedby="contact-form-note" aria-busy={busy} className="contact-form">
+                <div className="hidden" aria-hidden="true">
+                  <label htmlFor="contact-website">Leave this field blank</label>
+                  <input id="contact-website" name="website" autoComplete="off" tabIndex={-1} value={formData.website} onChange={(e) => updateField('website', e.target.value)} />
+                </div>
+                <h3 className="form-heading">Your enquiry</h3><p id="contact-form-note" className="form-note">Your name, email and message will be shared with the farm to handle your enquiry. Please do not include sensitive information. Reloading this page clears your input.</p>
+                {!siteKey && <p role="status" className="form-unavailable">Online contact is temporarily unavailable. Your input will stay on this page until you reload it.</p>}
                 <div>
-                  <label className="block text-lg font-semibold text-primary-brown mb-3">Full Name</label>
+                  <label htmlFor="contact-name" >Full Name</label>
                   <input
                     type="text"
                     required
-                    value={formData.name}
-                    onChange={(e) => setFormData({...formData, name: e.target.value})}
-                    className="w-full p-5 lg:p-6 rounded-2xl border-2 border-primary-cream/50 bg-white/50 backdrop-blur-sm focus:border-primary-olive focus:outline-none focus:ring-4 focus:ring-primary-olive/20 transition-all duration-300 text-lg placeholder-gray-500"
+                    id="contact-name" name="name" maxLength={100} autoComplete="name" value={formData.name}
+                    disabled={busy} onChange={(e) => updateField('name', e.target.value)}
+
                     placeholder="Your Name"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-lg font-semibold text-primary-brown mb-3">Email</label>
+                  <label htmlFor="contact-email" >Email</label>
                   <input
                     type="email"
                     required
-                    value={formData.email}
-                    onChange={(e) => setFormData({...formData, email: e.target.value})}
-                    className="w-full p-5 lg:p-6 rounded-2xl border-2 border-primary-cream/50 bg-white/50 backdrop-blur-sm focus:border-primary-olive focus:outline-none focus:ring-4 focus:ring-primary-olive/20 transition-all duration-300 text-lg placeholder-gray-500"
-                    placeholder="your@email.com"
+                    id="contact-email" name="email" maxLength={254} autoComplete="email" value={formData.email}
+                    disabled={busy} onChange={(e) => updateField('email', e.target.value)}
+
+                    placeholder="visitor@example.com"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-lg font-semibold text-primary-brown mb-3">Message</label>
+                  <label htmlFor="contact-message" >Message</label>
                   <textarea
                     rows="5"
                     required
-                    value={formData.message}
-                    onChange={(e) => setFormData({...formData, message: e.target.value})}
-                    className="w-full p-5 lg:p-6 rounded-2xl border-2 border-primary-cream/50 bg-white/50 backdrop-blur-sm focus:border-primary-olive focus:outline-none focus:ring-4 focus:ring-primary-olive/20 transition-all duration-300 text-lg resize-vertical placeholder-gray-500"
-                    placeholder="Tell us about your inquiry..."
+                    id="contact-message" name="message" maxLength={5000}  value={formData.message}
+                    disabled={busy} onChange={(e) => updateField('message', e.target.value)}
+
+                    placeholder="Which produce or farm question can we help with?"
                   ></textarea>
                 </div>
 
+                <SecurityCheck siteKey={siteKey} onToken={setToken} resetKey={resetKey} />
+                <p role="status" aria-live="polite" className="contact-status">{status}</p>
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  type="submit"
-                  className="w-full bg-gradient-to-r from-primary-brown via-primary-terracotta to-primary-olive text-cream py-6 lg:py-7 rounded-2xl text-xl lg:text-2xl font-semibold shadow-2xl hover:shadow-[0_20px_40px_rgba(78,52,46,0.3)] transition-all duration-300 font-inter tracking-wide uppercase"
+                  type="submit" disabled={busy || (!siteKey && !receipt)}
+                  className="button contact-submit"
                 >
-                  Send Message
+                  {busy ? 'Please wait...' : receipt ? 'Check delivery status' : 'Send message'}
                 </motion.button>
               </form>
             </div>
@@ -135,4 +153,3 @@ const Contact = () => {
 }
 
 export default Contact
-

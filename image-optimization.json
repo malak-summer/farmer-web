@@ -1,0 +1,7 @@
+{
+  "source": "public/media/farmer.jpg",
+  "target": "public/media/farmer.webp",
+  "originalBytes": 724286,
+  "optimizedBytes": 453182,
+  "decodedPixelsIdentical": true
+}

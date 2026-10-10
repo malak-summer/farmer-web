@@ -1,0 +1,26 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+[functions]
+  directory = "netlify/functions"
+
+[[redirects]]
+  from = "/api/contact"
+  to = "/.netlify/functions/contact"
+  status = 200
+
+# Vite builds eight HTML pages with normal links. No catch-all 200 SPA rewrite is needed.
+# Netlify automatically serves 404.html with status 404 for missing paths.
+[[headers]]
+  for = "/*"
+  [headers.values]
+# Staging defense in depth. Remove only after explicit public-launch approval.
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    X-Frame-Options = "DENY"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"

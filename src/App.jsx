@@ -1,50 +1,23 @@
-import { useEffect } from 'react'
-import { motion } from 'framer-motion'
+import { MotionConfig } from 'framer-motion'
 import Navbar from './components/Navbar'
-import Hero from './components/Hero'
-import About from './components/About'
-import Products from './components/Products'
-import WhyUs from './components/WhyUs'
-import Social from './components/Social'
-import Contact from './components/Contact'
 import Footer from './components/Footer'
+import HomePage from './pages/HomePage'
+import ShopPage from './pages/ShopPage'
+import CategoriesPage from './pages/CategoriesPage'
+import AboutPage from './pages/AboutPage'
+import BlogPage from './pages/BlogPage'
+import ContactPage from './pages/ContactPage'
+import ArticlePage from './pages/ArticlePage'
+import { currentPage } from './content/navigation'
+import { articles } from './content/articles'
 
+const pageComponents = { home: HomePage, shop: ShopPage, categories: CategoriesPage, about: AboutPage, blog: BlogPage, contact: ContactPage }
 function App() {
-  useEffect(() => {
-    // Smooth scrolling for anchor links
-    document.querySelectorAll('a[href^=\"#\"]').forEach(anchor => {
-      anchor.addEventListener('click', function (e) {
-        e.preventDefault()
-        const target = document.querySelector(this.getAttribute('href'))
-        if (target) {
-          target.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-          })
-        }
-      })
-    })
-  }, [])
-
-  return (
-    <div className="min-h-screen">
-      <Navbar />
-      <motion.main
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5 }}
-      >
-        <Hero />
-        <About />
-        <Products />
-        <WhyUs />
-        <Social />
-        <Contact />
-      </motion.main>
-      <Footer />
-    </div>
-  )
+  const pathname = window.location.pathname
+  const page = currentPage(pathname)
+  const article = articles.find(item => item.href === pathname)
+  const Page = pageComponents[page?.key]
+  if (!Page && !article) return <main id="main" className="not-found section-shell"><h1>Page not found</h1><p>This page does not exist at Fresh Farm.</p><a href="/" className="button">Return home</a></main>
+  return <MotionConfig reducedMotion="user"><div className="site-layout"><a href="#main" className="skip-link">Skip to content</a><Navbar activePage={article ? 'blog' : page.key} /><main id="main" tabIndex={-1}>{article ? <ArticlePage article={article} /> : <Page />}</main><Footer /></div></MotionConfig>
 }
-
 export default App
-

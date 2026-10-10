@@ -1,99 +1,22 @@
-import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
-
-const Navbar = () => {
-  const [isScrolled, setIsScrolled] = useState(false)
+import BrandLogo from './BrandLogo'
+import { useEffect, useRef, useState } from 'react'
+import { farmContent } from '../content/farm'
+import { pages } from '../content/navigation'
+const Navbar = ({ activePage = 'home' }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-
+  const toggle = useRef(null)
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50)
-    }
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
+    const query = window.matchMedia('(min-width: 1000px)')
+    const close = () => { if (query.matches) setIsMenuOpen(false) }
+    query.addEventListener('change', close)
+    return () => query.removeEventListener('change', close)
   }, [])
-
-  return (
-    <motion.nav
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled 
-          ? 'bg-cream/95 backdrop-blur-md shadow-soft py-3' 
-          : 'bg-transparent py-6'
-      }`}
-    >
-      <div className="container mx-auto px-6 lg:px-8">
-        <div className="flex justify-between items-center">
-          {/* Logo */}
-          <motion.div 
-            whileHover={{ scale: 1.05 }}
-            className="text-2xl lg:text-3xl font-playfair font-bold bg-gradient-to-r from-primary-brown to-primary-terracotta bg-clip-text text-transparent"
-          >
-            FreshFarm
-          </motion.div>
-
-          {/* Desktop Menu */}
-          <ul className="hidden lg:flex items-center space-x-8 text-lg font-medium">
-            {[
-              { name: 'Home', href: '#hero' },
-              { name: 'About', href: '#about' },
-              { name: 'Products', href: '#products' },
-              { name: 'Why Us', href: '#whyus' },
-              { name: 'Contact', href: '#contact' }
-            ].map((item) => (
-              <li key={item.name}>
-                <a 
-                  href={item.href}
-                  className="relative group text-gray-700 hover:text-primary-brown transition-colors duration-300 after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-gradient-to-r after:from-primary-brown after:to-primary-terracotta after:transition-all after:duration-300 group-hover:after:w-full"
-                >
-                  {item.name}
-                </a>
-              </li>
-            ))}
-          </ul>
-
-          {/* Mobile Menu Button */}
-          <button 
-            className="lg:hidden z-50 p-2 relative"
-onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
-            <span className={`block w-6 h-0.5 bg-gray-700 transition-all duration-300 ${isMenuOpen ? 'rotate-45 translate-y-1.5' : '-translate-y-1'}`}></span>
-            <span className={`block w-6 h-0.5 bg-gray-700 transition-all duration-300 my-1 ${isMenuOpen ? 'opacity-0' : 'opacity-100'}`}></span>
-            <span className={`block w-6 h-0.5 bg-gray-700 transition-all duration-300 ${isMenuOpen ? '-rotate-45 -translate-y-1.5' : 'translate-y-1'}`}></span>
-          </button>
-        </div>
-
-        {/* Mobile Menu */}
-{isMenuOpen && (
-          <motion.ul 
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            className="lg:hidden absolute top-full left-0 right-0 bg-cream/95 backdrop-blur-md shadow-soft py-6 px-6 border-t border-primary-olive"
-          >
-            {[
-              { name: 'Home', href: '#hero' },
-              { name: 'About', href: '#about' },
-              { name: 'Products', href: '#products' },
-              { name: 'Why Us', href: '#whyus' },
-              { name: 'Contact', href: '#contact' }
-            ].map((item, index) => (
-              <li key={item.name} className="py-2">
-                <a 
-                  href={item.href}
-                  className="block text-xl font-medium text-gray-700 hover:text-primary-brown transition-colors"
-onClick={() => setIsMenuOpen(false)}
-                >
-                  {item.name}
-                </a>
-              </li>
-            ))}
-          </motion.ul>
-        )}
-      </div>
-    </motion.nav>
-  )
+  const navigationLinks = pages.map(({ name, href, key }) => <li key={key}><a aria-current={activePage === key ? 'page' : undefined} href={href} onClick={() => setIsMenuOpen(false)}>{name}</a></li>)
+  return <header className="site-header"><nav className="section-shell navigation" aria-label="Main navigation" onKeyDown={event => { if (event.key === 'Escape' && isMenuOpen) { setIsMenuOpen(false); toggle.current?.focus() } }}>
+    <a className="brand" href="/" aria-label={`${farmContent.name} home`}><BrandLogo responsive /></a>
+    <ul className="desktop-links">{navigationLinks}</ul>
+    <button ref={toggle} id="menu-toggle" type="button" className="menu-toggle" aria-label={isMenuOpen ? 'Close menu' : 'Open menu'} aria-expanded={isMenuOpen} aria-controls="mobile-menu" onClick={() => setIsMenuOpen(!isMenuOpen)}>{isMenuOpen ? 'Close' : 'Menu'} <span aria-hidden="true">{isMenuOpen ? '×' : '☰'}</span></button>
+    {isMenuOpen && <ul id="mobile-menu" className="mobile-links">{navigationLinks}</ul>}
+  </nav></header>
 }
-
 export default Navbar
-

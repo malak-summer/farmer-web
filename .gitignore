@@ -1,0 +1,37 @@
+node_modules/
+dist/
+.env
+.env.*
+!.env.example
+*.local
+*.log
+*.tmp
+*.temp
+*.pem
+*.key
+*.p12
+*.pfx
+.npm/
+.vite/
+.cache/
+coverage/
+.DS_Store
+Thumbs.db
+.codex/
+.agents/
+# Local design/reference archives and generated deliverable copies
+reference-images/
+design-reference.jpg
+brand-backup-*/
+fresh-farm-logo/
+fresh-farm-logo.zip
+package-lock.pre-*.json
+# Historical local reports; current readiness/guide are tracked
+CONTENT-COMPLETION-REPORT.md
+DEPLOYMENT-AUDIT.md
+LAUNCH_CHECKLIST.md
+PHOTO-PLACEMENT-UPDATE.md
+PROJECT_AUDIT.md
+REDESIGN-REPORT.md
+audit-dependencies.json
+audit-production-dependencies.json

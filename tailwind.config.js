@@ -1,3 +1,4 @@
+
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
@@ -7,6 +8,7 @@ export default {
   theme: {
     extend: {
       colors: {
+        cream: '#FFF8E1',
         primary: {
           brown: '#4E342E',
           terracotta: '#D84315',
@@ -41,8 +43,5 @@ export default {
       }
     },
   },
-  plugins: [
-require('@tailwindcss/typography'),
-  ],
+  plugins: [],
 }
-
