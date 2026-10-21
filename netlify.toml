@@ -1,0 +1,4 @@
+[build]
+  # Install dependencies before building so the build never depends on a pre-existing node_modules
+  command = "npm ci --no-audit --no-fund && npm run build"
+  publish = "dist"
