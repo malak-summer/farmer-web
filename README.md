@@ -1,5 +1,7 @@
 # Fresh Farm
 
+A modern agricultural business website built with React, Tailwind CSS, and Framer Motion.
+
 React 18 and Vite multi-page farm website, prepared for protected staging. This is an enquiry website, not an online store. Public launch remains blocked by client approval, live contact acceptance, browser QA and development-tool dependency findings.
 
 ## Run and verify

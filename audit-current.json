@@ -88,7 +88,7 @@
       ],
       "fixAvailable": {
         "name": "vite",
-        "version": "8.3.4",
+        "version": "8.3.5",
         "isSemVerMajor": true
       }
     },
@@ -170,8 +170,7 @@
       ],
       "range": "<7.1.6",
       "nodes": [
-        "node_modules/postcss-nested/node_modules/postcss-selector-parser",
-        "node_modules/tailwindcss/node_modules/postcss-selector-parser"
+        "node_modules/postcss-selector-parser"
       ],
       "fixAvailable": {
         "name": "tailwindcss",
@@ -257,16 +256,97 @@
           },
           "range": "<=6.4.2"
         },
+        {
+          "source": 1242622,
+          "name": "vite",
+          "dependency": "vite",
+          "title": "launch-editor: escapeCmdArgs() omits % escaping on Windows",
+          "url": "https://github.com/advisories/GHSA-698v-4r3x-3vcv",
+          "severity": "moderate",
+          "cwe": [
+            "CWE-78"
+          ],
+          "cvss": {
+            "score": 0,
+            "vectorString": null
+          },
+          "range": "<=6.4.3"
+        },
+        {
+          "source": 1242651,
+          "name": "vite",
+          "dependency": "vite",
+          "title": "launch-editor: Editor CLI flag misinterpretation causing arbitrary command execution for some editors",
+          "url": "https://github.com/advisories/GHSA-r825-w8mm-5pxw",
+          "severity": "moderate",
+          "cwe": [
+            "CWE-88"
+          ],
+          "cvss": {
+            "score": 0,
+            "vectorString": null
+          },
+          "range": "<=6.4.3"
+        },
+        {
+          "source": 1242658,
+          "name": "vite",
+          "dependency": "vite",
+          "title": "launch-editor: `fs.existsSync()` existence check can be bypassed on Windows",
+          "url": "https://github.com/advisories/GHSA-587h-7wmj-h5pm",
+          "severity": "high",
+          "cwe": [
+            "CWE-77"
+          ],
+          "cvss": {
+            "score": 0,
+            "vectorString": null
+          },
+          "range": "<=6.4.3"
+        },
+        {
+          "source": 1242724,
+          "name": "vite",
+          "dependency": "vite",
+          "title": "Vite: Cross origin script execution through Vite custom middleware",
+          "url": "https://github.com/advisories/GHSA-9jrq-w75r-8gcw",
+          "severity": "low",
+          "cwe": [
+            "CWE-80"
+          ],
+          "cvss": {
+            "score": 0,
+            "vectorString": null
+          },
+          "range": "<=6.4.3"
+        },
+        {
+          "source": 1242730,
+          "name": "vite",
+          "dependency": "vite",
+          "title": "Vite: Files outside `server.fs.allow` could be served when project paths match system paths on non-Windows machine",
+          "url": "https://github.com/advisories/GHSA-rq7h-c2jc-7f22",
+          "severity": "moderate",
+          "cwe": [
+            "CWE-22",
+            "CWE-284"
+          ],
+          "cvss": {
+            "score": 0,
+            "vectorString": null
+          },
+          "range": "<=6.4.3"
+        },
         "esbuild"
       ],
       "effects": [],
-      "range": "<=6.4.2",
+      "range": "<=6.4.3",
       "nodes": [
         "node_modules/vite"
       ],
       "fixAvailable": {
         "name": "vite",
-        "version": "8.3.4",
+        "version": "8.3.5",
         "isSemVerMajor": true
       }
     }
@@ -282,11 +362,11 @@
     },
     "dependencies": {
       "prod": 10,
-      "dev": 399,
+      "dev": 398,
       "optional": 76,
       "peer": 0,
       "peerOptional": 0,
-      "total": 408
+      "total": 407
     }
   }
 }
